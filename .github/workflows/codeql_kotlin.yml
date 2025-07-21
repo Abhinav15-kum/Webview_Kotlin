@@ -23,7 +23,7 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
-        languages: java-kotlin # Specify both languages
+        languages: kotlin # Specify both languages
 
     - name: Autobuild (or specify manual build steps)
       uses: github/codeql-action/autobuild@v3
