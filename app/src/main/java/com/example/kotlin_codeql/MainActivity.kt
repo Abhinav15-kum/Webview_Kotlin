@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var pass="12345"
+            var pass="XYZ"
 
             var webView: WebView = WebView(this)
             setContentView(webView)
