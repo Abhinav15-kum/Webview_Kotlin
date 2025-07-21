@@ -21,10 +21,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
-            val parcel = Parcel.obtain()
-            val userParcelable = parcel.readParcelable(UserParcelable::class.java.classLoader)
-
             var pass="XYZ"
 
             var webView: WebView = WebView(this)
