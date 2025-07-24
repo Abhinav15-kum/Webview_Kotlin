@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            var pass="XYZ"
+            var pass="XYZQWERT"
 
             var webView: WebView = WebView(this)
             setContentView(webView)
@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
 
             webView.loadUrl("file:///android_asset/index.html")
         }
+
     }
 }
 
