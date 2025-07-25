@@ -71,7 +71,7 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        queries: ./codeql/custom-kotlin/queries
+        queries: +./codeql/custom-kotlin/queries
         
 
        
@@ -102,4 +102,4 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
-        queries: ./codeql/custom-kotlin/queries
+
