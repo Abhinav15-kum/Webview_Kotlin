@@ -14,8 +14,10 @@ class WebviewActiviuty : AppCompatActivity() {
         setContentView(webView)
 
         val webSettings: WebSettings = webView.settings
+
         webSettings.javaScriptEnabled = true
-webSettings.allowFileAccess=true
+
+        webSettings.allowFileAccess=true
 
         webSettings.allowFileAccessFromFileURLs = true
         webSettings.allowUniversalAccessFromFileURLs = true
