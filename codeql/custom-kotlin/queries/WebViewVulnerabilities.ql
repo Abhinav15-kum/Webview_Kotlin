@@ -1,13 +1,9 @@
-import java
-import semmle.code.java.dataflow.FlowSources
-import semmle.code.java.security.Security
+import semmle.code.kotlin.MethodCallExpr
+import semmle.code.kotlin.Expr
+import semmle.code.kotlin.BooleanLiteral
 
-from MethodAccess ma
+from MethodCallExpr call
 where
-  ma.getMethod().hasName("setJavaScriptEnabled") and
- ma.getMethod().hasName("allowFileAccess") and
-  ma.getMethod().getDeclaringType().getName() = "WebSettings" and
-  ma.getArgument(0) instanceof BooleanLiteral and
-  ((BooleanLiteral)ma.getArgument(0)).getBooleanValue() = true
-select ma, "JavaScript is enabled on a WebView, which can expose it to injection vulnerabilities."
-
+  call.getMethodName() = "setJavaScriptEnabled" and
+  exists(BooleanLiteral lit | lit = call.getArgument(0) and lit.getBooleanValue() = true)
+select call, "JavaScript is enabled on a WebView, which can expose it to injection vulnerabilities."
