@@ -1,6 +1,7 @@
 import semmle.code.kotlin.PropertyAccess
 import semmle.code.kotlin.BooleanLiteral
-import semmle.code.kotlin.Expr
+import semmle.code.kotlin.Property
+import semmle.code.kotlin.ClassInstanceExpr
 
 from PropertyAccess access, BooleanLiteral lit
 where
