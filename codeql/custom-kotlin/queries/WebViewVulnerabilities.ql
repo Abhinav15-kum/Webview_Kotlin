@@ -1,9 +1,12 @@
-import semmle.code.kotlin.MethodCallExpr
-import semmle.code.kotlin.Expr
+import semmle.code.kotlin.PropertyAccess
 import semmle.code.kotlin.BooleanLiteral
+import semmle.code.kotlin.Expr
 
-from MethodCallExpr call
+from PropertyAccess access, BooleanLiteral lit
 where
-  call.getMethodName() = "setJavaScriptEnabled" and
-  exists(BooleanLiteral lit | lit = call.getArgument(0) and lit.getBooleanValue() = true)
-select call, "JavaScript is enabled on a WebView, which can expose it to injection vulnerabilities."
+  access.getName() = "javaScriptEnabled" and
+  access.isWrite() and
+  access.getAssignedValue() = lit and
+  lit.getBooleanValue() = true
+select access,
+  "JavaScript is enabled on a WebView, which can expose it to injection vulnerabilities."
