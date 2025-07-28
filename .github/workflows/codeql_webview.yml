@@ -65,7 +65,7 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        queries: +./codeql/custom-kotlin/queries
+        queries: +./codeql/custom-kotlin
 
     - name: Build (manual mode)
       if: matrix.build-mode == 'manual'
