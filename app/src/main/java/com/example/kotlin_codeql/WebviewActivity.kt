@@ -1,3 +1,5 @@
+package com.example.kotlin_codeql.WebviewActivity
+
 import android.os.Bundle
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
