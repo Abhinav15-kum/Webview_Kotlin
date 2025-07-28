@@ -19,10 +19,6 @@ class WebviewActiviuty : AppCompatActivity() {
 
         webSettings.allowFileAccess=true
 
-        webSettings.allowFileAccessFromFileURLs = true
-        webSettings.allowUniversalAccessFromFileURLs = true
-
-
         webView.addJavascriptInterface(InsecureInterface(), "Android")
 
         webView.webViewClient = WebViewClient()
