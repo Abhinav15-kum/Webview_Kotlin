@@ -14,10 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kotlin_Codeql">
         <activity
-            android:name="WebviewActiviuty"
+            android:name="com.example.kotlin_codeql.WebviewActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Kotlin_Codeql">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
