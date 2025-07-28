@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        language: [java-kotlin]
+        language: [java, kotlin]
         build-mode: [manual]
 
     steps:
@@ -38,6 +38,10 @@ jobs:
         build-mode: ${{ matrix.build-mode }}
         queries: +./codeql/custom-kotlin
         cli-version: '2.22.4'
+        packs: github/codeql --registry
+
+    - name: Install CodeQL packs
+      run: codeql pack install
 
     - name: Build (manual mode)
       run: |
