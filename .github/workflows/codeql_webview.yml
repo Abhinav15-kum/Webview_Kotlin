@@ -65,20 +65,22 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        queries: +./codeql/custom-kotlin
+        queries: +./codeql/custom-kotlin   # <-- Custom queries here
 
-    - name: Install CodeQL packs
-      run: codeql pack install ./codeql/custom-kotlin
+    # REMOVE this step entirely
+    #- name: Install CodeQL packs
+    #  run: codeql pack install ./codeql/custom-kotlin
 
     - name: Build (manual mode)
       if: matrix.build-mode == 'manual'
       run: |
-       chmod +x ./gradlew
-       ./gradlew build --no-daemon --stacktrace --info
+        chmod +x ./gradlew
+        ./gradlew build --no-daemon --stacktrace --info
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{ matrix.language }}"
+
 
 
