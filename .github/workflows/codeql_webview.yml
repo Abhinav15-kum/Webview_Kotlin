@@ -70,7 +70,8 @@ jobs:
     - name: Build (manual mode)
       if: matrix.build-mode == 'manual'
       run: |
-        ./gradlew build --no-daemon
+       chmod +x ./gradlew
+       ./gradlew build --no-daemon --stacktrace --info
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
