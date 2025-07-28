@@ -67,6 +67,9 @@ jobs:
         build-mode: ${{ matrix.build-mode }}
         queries: +./codeql/custom-kotlin
 
+    - name: Install CodeQL packs
+      run: codeql pack install ./codeql/custom-kotlin
+
     - name: Build (manual mode)
       if: matrix.build-mode == 'manual'
       run: |
