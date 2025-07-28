@@ -21,41 +21,12 @@ on:
 
 jobs:
   analyze:
-    name: Analyze (${{ matrix.language }})
-    # Runner size impacts CodeQL analysis time. To learn more, please see:
-    #   - https://gh.io/recommended-hardware-resources-for-running-codeql
-    #   - https://gh.io/supported-runners-and-hardware-resources
-    #   - https://gh.io/using-larger-runners (GitHub.com only)
-    # Consider using larger runners or machines with greater resources for possible analysis time improvements.
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
-    permissions:
-      # required for all workflows
-      security-events: write
-
-      # required to fetch internal or private CodeQL packs
-      packages: read
-
-      # only required for workflows in private repositories
-      actions: read
-      contents: read
-
+    runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
-        include:
-        - language: actions
-          build-mode: none
-        - language: java-kotlin
-          build-mode: manual
+        language: [java-kotlin]
+        build-mode: [manual]
 
-        # CodeQL supports the following values keywords for 'language': 'actions', 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'rust', 'swift'
-        # Use `c-cpp` to analyze code written in C, C++ or both
-        # Use 'java-kotlin' to analyze code written in Java, Kotlin or both
-        # Use 'javascript-typescript' to analyze code written in JavaScript, TypeScript or both
-        # To learn more about changing the languages that are analyzed or customizing the build mode for your analysis,
-        # see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/customizing-your-advanced-setup-for-code-scanning.
-        # If you are analyzing a compiled language, you can modify the 'build-mode' for that language to customize how
-        # your codebase is analyzed, see https://docs.github.com/en/code-security/code-scanning/creating-an-advanced-setup-for-code-scanning/codeql-code-scanning-for-compiled-languages
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -65,15 +36,10 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
-        queries: +./codeql/custom-kotlin   # <-- Custom queries here
-       
-
-    # REMOVE this step entirely
-    #- name: Install CodeQL packs
-    #  run: codeql pack install ./codeql/custom-kotlin
+        queries: +./codeql/custom-kotlin
+        cli-version: '2.22.4'
 
     - name: Build (manual mode)
-      if: matrix.build-mode == 'manual'
       run: |
         chmod +x ./gradlew
         ./gradlew build --no-daemon --stacktrace --info
@@ -82,6 +48,7 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{ matrix.language }}"
+
 
 
 
