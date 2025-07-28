@@ -1,0 +1,6 @@
+name: custom-kotlin-queries
+version: 0.0.1
+dependencies:
+  codeql/kotlin-all: "*"
+defaultSuite:
+  - queries: ./queries
