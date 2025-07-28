@@ -66,6 +66,7 @@ jobs:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
         queries: +./codeql/custom-kotlin   # <-- Custom queries here
+        packs: codeql/kotlin-all@latest
 
     # REMOVE this step entirely
     #- name: Install CodeQL packs
