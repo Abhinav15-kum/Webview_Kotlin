@@ -2,9 +2,7 @@ name: Run Custom CodeQL Query on Kotlin
 
 on:
   push:
-
   pull_request:
-
 
 jobs:
   codeql-custom-query:
@@ -32,6 +30,3 @@ jobs:
         uses: github/codeql-action/analyze@v3
         with:
           category: custom-codeql
-        env:
-          DEBUG: 'true'
-          CODEQL_DEBUG: 'true'
