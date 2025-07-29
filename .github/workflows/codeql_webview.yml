@@ -1,21 +1,20 @@
-name: Run Custom CodeQL Query on Kotlin
+name: Run CodeQL on Kotlin
 
 on:
   push:
   pull_request:
 
 jobs:
-  codeql-custom-query:
+  codeql:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Initialize CodeQL with packs
+      - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: kotlin
@@ -23,10 +22,8 @@ jobs:
             codeql/kotlin-all@2.12.0
             ./codeql/custom-kotlin
 
-      - name: Build the Kotlin project
+      - name: Build
         run: ./gradlew assemble
 
-      - name: Run CodeQL analysis
+      - name: Analyze
         uses: github/codeql-action/analyze@v3
-        with:
-          category: custom-codeql
