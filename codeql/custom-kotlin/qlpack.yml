@@ -1,5 +1,5 @@
 name: custom-kotlin
 version: 1.0.0
 dependencies:
-  codeql/kotlin-all: "*"
+  codeql/java-all: "*"
 defaultSuiteFile: suite.qls
