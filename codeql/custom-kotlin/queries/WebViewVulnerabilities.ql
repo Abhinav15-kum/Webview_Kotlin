@@ -1,16 +1,16 @@
 /**
- * @name Use of addJavascriptInterface in Kotlin WebView
- * @description Detects potentially unsafe use of addJavascriptInterface in Kotlin code.
+ * @name Unsafe use of addJavascriptInterface in WebView
  * @kind problem
+ * @id android/webview/add-javascript-interface
  * @problem.severity warning
- * @id kotlin/webview/add-javascript-interface
+ * @description Detects unsafe use of WebView.addJavascriptInterface, which can expose native methods to JavaScript.
  */
 
-import kotlin
-import kotlin.reflect
-import kotlin.qldoc
+import java
+import android
 
-from MethodCall call
+from MethodAccess call
 where
-  call.getMethod().getQualifiedName().matches("%WebView%addJavascriptInterface%")
-select call, "Use of addJavascriptInterface may be dangerous if input is attacker-controlled."
+  call.getMethod().getName() = "addJavascriptInterface" and
+  call.getMethod().getDeclaringType().getName() = "WebView"
+select call, "This WebView uses addJavascriptInterface, which may expose native methods to JavaScript."
