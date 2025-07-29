@@ -1,3 +1,11 @@
+/**
+ * @name Insecure WebView Configuration
+ * @description Flags potentially unsafe WebView settings such as enabling JavaScript or file access
+ * @kind problem
+ * @problem.severity warning
+ * @id custom-kotlin/insecure-webview-settings
+ */
+
 import java
 
 from FieldWrite fw, Field f, string message
