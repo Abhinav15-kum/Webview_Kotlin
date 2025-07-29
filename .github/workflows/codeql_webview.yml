@@ -4,11 +4,14 @@ on:
   push:
     branches: 
   pull_request:
-    branches:
+    branches: 
 
 jobs:
   codeql-custom-query:
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,11 +22,11 @@ jobs:
           languages: kotlin
 
       - name: Build the project
-        run: |
-          ./gradlew assemble  # Or use your preferred build command
+        run: ./gradlew assemble
 
       - name: Run CodeQL custom query
         uses: github/codeql-action/analyze@v3
         with:
           category: 'custom-codeql'
           queries: ./codeql/custom-kotlin/queries/WebViewVulnerabilities.ql
+
