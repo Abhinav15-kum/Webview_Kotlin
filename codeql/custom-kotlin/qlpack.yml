@@ -1,6 +1,6 @@
 name: custom-kotlin
 version: 1.0.0
-dependencies: {}
-libraryPathDependencies: {}
+dependencies:
+  codeql-kotlin: "*"
 defaultSuite:
   - suite.qls
