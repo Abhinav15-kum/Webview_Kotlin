@@ -1,41 +1,29 @@
-name: "CodeQL Advanced"
+name: Run Custom CodeQL Query on Kotlin
 
 on:
   push:
-    branches:
-  
+    branches: 
   pull_request:
     branches:
-    
-  schedule:
-    - cron: '19 15 * * 0'
 
 jobs:
-  analyze:
+  codeql-custom-query:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: java,kotlin
-        build-mode: manual
-        queries: ./codeql/custom-kotlin
-        cli-version: '2.22.4'
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ['kotlin']
 
-    - name: Install CodeQL pack dependencies
-      run: codeql pack install ./codeql/custom-kotlin
+      - name: Build the project
+        run: |
+          ./gradlew assemble  # Or use your preferred build command
 
-    - name: Build
-      run: |
-        chmod +x ./gradlew
-        ./gradlew build --no-daemon --stacktrace --info
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
-      with:
-        category: codeql-java-kotlin
-        # point to directory with installed packs, so analyze can resolve dependencies
-        packs-dir: ~/.codeql/packages
+      - name: Run CodeQL custom query
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: 'custom-codeql'
+          queries: ./codeql/custom-kotlin/queries/WebViewVulnerabilities.ql
