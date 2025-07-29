@@ -2,9 +2,7 @@ name: Run Custom CodeQL Query on Kotlin
 
 on:
   push:
-    branches: 
   pull_request:
-    branches: 
 
 jobs:
   codeql-custom-query:
@@ -29,4 +27,3 @@ jobs:
         with:
           category: 'custom-codeql'
           queries: ./codeql/custom-kotlin/queries/WebViewVulnerabilities.ql
-
