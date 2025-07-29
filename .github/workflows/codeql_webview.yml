@@ -17,6 +17,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Install CodeQL Pack Dependencies
+      run: codeql pack install ./codeql/custom-kotlin
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
