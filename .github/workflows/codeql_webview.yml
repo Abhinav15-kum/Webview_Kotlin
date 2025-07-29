@@ -22,6 +22,11 @@ jobs:
           languages: kotlin
           queries: ./codeql/custom-kotlin
 
+      - name: Install CodeQL packs for custom-kotlin
+        run: |
+          cd codeql/custom-kotlin
+          codeql pack install
+
       - name: Build the project
         run: ./gradlew assemble
 
