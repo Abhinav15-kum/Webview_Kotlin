@@ -1,28 +1,16 @@
-import java
-import android
-import semmle.code.java.security.TaintTracking
-import DataFlow::PathGraph
+/**
+ * @name Use of addJavascriptInterface in Kotlin WebView
+ * @description Detects potentially unsafe use of addJavascriptInterface in Kotlin code.
+ * @kind problem
+ * @problem.severity warning
+ * @id kotlin/webview/add-javascript-interface
+ */
 
-class WebViewSink extends MethodAccess {
-  WebViewSink() {
-    this.getMethod().getDeclaringType().getName() = "WebView" and
-    (
-      this.getMethod().getName() = "addJavascriptInterface" or
-      this.getMethod().getName() = "loadUrl"
-    )
-  }
-}
+import kotlin
+import kotlin.reflect
+import kotlin.qldoc
 
-class UserControlledSource extends DataFlow::SourceNode {
-  UserControlledSource() {
-    exists(MethodAccess m |
-      m.getMethod().getName() = "getStringExtra" and
-      m.getQualifier().getType().hasQualifiedName("android.content", "Intent") and
-      this.asExpr() = m
-    )
-  }
-}
-
-from UserControlledSource src, WebViewSink sink, PathNode path
-where path = DataFlow::localFlowPath(src.asExpr(), sink)
-select sink, "WebView receives user-controlled input from here.", path
+from MethodCall call
+where
+  call.getMethod().getQualifiedName().matches("%WebView%addJavascriptInterface%")
+select call, "Use of addJavascriptInterface may be dangerous if input is attacker-controlled."
