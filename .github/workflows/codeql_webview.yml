@@ -2,9 +2,7 @@ name: Run Custom CodeQL Query on Kotlin
 
 on:
   push:
-    
   pull_request:
-   
 
 jobs:
   codeql-custom-query:
@@ -16,16 +14,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Initialize CodeQL
+      # Install CodeQL CLI first (without queries)
+      - name: Initialize CodeQL without custom queries
         uses: github/codeql-action/init@v3
         with:
           languages: kotlin
-          queries: ./codeql/custom-kotlin
 
+      # Install official kotlin-all pack globally
+      - name: Install official Kotlin pack globally
+        run: codeql pack install codeql/kotlin-all
+
+      # Install your custom Kotlin pack dependencies locally
       - name: Install CodeQL packs for custom-kotlin
         run: |
           cd codeql/custom-kotlin
           codeql pack install
+
+      # Now re-run init with your custom queries
+      - name: Initialize CodeQL with custom queries
+        uses: github/codeql-action/init@v3
+        with:
+          languages: kotlin
+          queries: ./codeql/custom-kotlin
 
       - name: Build the project
         run: ./gradlew assemble
