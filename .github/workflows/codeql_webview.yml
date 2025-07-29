@@ -24,4 +24,31 @@ jobs:
           languages: kotlin
 
       # Step 2: Install official Kotlin pack globally (CLI now available)
-      - name: Install official Kotlin pack globall
+      - name: Install official Kotlin pack globally
+        run: codeql pack install codeql/kotlin-all
+
+      # Step 3: Install your custom Kotlin pack dependencies locally
+      - name: Install custom Kotlin pack dependencies
+        run: |
+          cd codeql/custom-kotlin
+          codeql pack install
+
+      # Step 4: Re-initialize CodeQL with your custom queries (all dependencies installed)
+      - name: Initialize CodeQL with custom queries
+        uses: github/codeql-action/init@v3
+        with:
+          languages: kotlin
+          queries: ./codeql/custom-kotlin
+
+      # Step 5: Build the Kotlin project
+      - name: Build the project
+        run: ./gradlew assemble
+
+      # Step 6: Run CodeQL analysis
+      - name: Run CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: custom-codeql
+        env:
+          DEBUG: 'true'
+          CODEQL_DEBUG: 'true'
