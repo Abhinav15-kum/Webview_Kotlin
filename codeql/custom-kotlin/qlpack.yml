@@ -2,5 +2,4 @@ name: custom-kotlin
 version: 1.0.0
 dependencies:
   codeql-kotlin: "*"
-defaultSuite:
-  - suite.qls
+defaultSuiteFile: suite.qls
