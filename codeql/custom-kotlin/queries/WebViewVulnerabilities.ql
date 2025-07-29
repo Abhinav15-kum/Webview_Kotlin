@@ -1,26 +1,33 @@
 /**
- * @name Insecure WebView Configuration
- * @description Flags potentially unsafe WebView settings such as enabling JavaScript or file access
+ * @name Insecure WebView Configuration (Kotlin)
+ * @description Flags calls to dangerous WebView settings
  * @kind problem
  * @problem.severity warning
  * @id custom-kotlin/insecure-webview-settings
  */
 
-import java
+import kotlin
 
-from FieldWrite fw, Field f, string message
-where 
-  f = fw.getField() and
+from MethodCall call, string message
+where
   (
-    (f.getName() = "javaScriptEnabled" and 
-     message = "WebView JavaScript is enabled, which may allow XSS attacks if loading untrusted content.") or
-    (f.getName() = "allowFileAccess" and 
-     message = "WebView file access is enabled, which may lead to local file disclosure.") or
-    (f.getName() = "allowContentAccess" and 
-     message = "WebView content access is enabled, which may allow access to content providers.") or
-    (f.getName() = "allowFileAccessFromFileURLs" and 
-     message = "WebView allows file access from file URLs, which may lead to local file disclosure.") or
-    (f.getName() = "allowUniversalAccessFromFileURLs" and 
-     message = "WebView allows universal access from file URLs, which is a serious security risk.")
+    call.getMethod().getName() = "setJavaScriptEnabled" and
+    message = "WebView JavaScript is enabled, which may allow XSS attacks if loading untrusted content."
+  ) or
+  (
+    call.getMethod().getName() = "setAllowFileAccess" and
+    message = "WebView file access is enabled, which may lead to local file disclosure."
+  ) or
+  (
+    call.getMethod().getName() = "setAllowContentAccess" and
+    message = "WebView content access is enabled, which may allow access to content providers."
+  ) or
+  (
+    call.getMethod().getName() = "setAllowFileAccessFromFileURLs" and
+    message = "WebView allows file access from file URLs, which may lead to local file disclosure."
+  ) or
+  (
+    call.getMethod().getName() = "setAllowUniversalAccessFromFileURLs" and
+    message = "WebView allows universal access from file URLs, which is a serious security risk."
   )
-select fw, message
+select call, message
