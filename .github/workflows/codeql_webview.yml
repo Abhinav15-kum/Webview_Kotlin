@@ -2,9 +2,9 @@ name: "CodeQL Advanced"
 
 on:
   push:
-    branches: 
+    branches:
   pull_request:
-    branches: 
+    branches:
   schedule:
     - cron: '19 15 * * 0'  # Weekly on Sunday at 15:19 UTC
 
@@ -18,7 +18,9 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Install CodeQL Pack Dependencies
-      run: codeql pack install ./codeql/custom-kotlin
+      uses: github/codeql-action/cli@v3
+      with:
+        command: pack install ./codeql/custom-kotlin
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
@@ -27,7 +29,6 @@ jobs:
         build-mode: manual
         queries: ./codeql/custom-kotlin/queries
         cli-version: '2.22.4'
-
 
     - name: Build (manual mode)
       run: |
