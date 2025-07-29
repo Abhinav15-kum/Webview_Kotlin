@@ -20,7 +20,7 @@ jobs:
         with:
           languages: kotlin
           packs: |
-            codeql/kotlin-all@latest
+            codeql/kotlin-all@2.12.0
             ./codeql/custom-kotlin
 
       - name: Build the Kotlin project
