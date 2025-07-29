@@ -28,7 +28,7 @@ jobs:
       - name: Run CodeQL analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: 'custom-codeql'
+          category: custom-codeql
         env:
           DEBUG: 'true'
           CODEQL_DEBUG: 'true'
