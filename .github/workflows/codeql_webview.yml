@@ -22,7 +22,7 @@ jobs:
       with:
         languages: java,kotlin
         build-mode: manual
-        queries: +./codeql/custom-kotlin
+        queries: ./codeql/custom-kotlin/queries
         cli-version: '2.22.4'
 
 
