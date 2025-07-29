@@ -1,6 +1,3 @@
- *       webview
- */
-
 import java
 
 from FieldWrite fw, Field f, string message
