@@ -19,9 +19,7 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: kotlin
-          packs: |
-            codeql/kotlin-all@2.12.0
-            ./codeql/custom-kotlin
+          packs: codeql/kotlin-all@2.12.0,./codeql/custom-kotlin
 
       - name: Build Kotlin project
         run: ./gradlew assemble
