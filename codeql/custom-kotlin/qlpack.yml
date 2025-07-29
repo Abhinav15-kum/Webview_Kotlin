@@ -1,5 +1,5 @@
 name: custom-kotlin
 version: 1.0.0
-dependencies: {}
-libraryPathDependencies: {}
+dependencies:
+libraryPathDependencies:
 defaultSuite: suite.qls
