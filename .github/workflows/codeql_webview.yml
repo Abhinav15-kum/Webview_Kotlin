@@ -22,8 +22,10 @@ jobs:
       - name: Build the project
         run: ./gradlew assemble
 
-      - name: Run CodeQL custom query
+      - name: Run CodeQL custom query pack
         uses: github/codeql-action/analyze@v3
         with:
           category: 'custom-codeql'
-          queries: ./codeql/custom-kotlin/queries/WebViewVulnerabilities.ql
+          queries: ./codeql/custom-kotlin
+        env:
+          DEBUG: 'true'  # optional, shows debug logs to help troubleshoot
