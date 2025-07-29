@@ -2,22 +2,20 @@ name: "CodeQL Advanced"
 
 on:
   push:
-    branches: 
-   
+    branches:
+      - main
   pull_request:
-    branches: 
- 
+    branches:
+      - main
   schedule:
     - cron: '19 15 * * 0'
 
 jobs:
   analyze:
-    name: Analyze CodeQL
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
@@ -27,12 +25,10 @@ jobs:
         queries: ./codeql/custom-kotlin
         cli-version: '2.22.4'
 
-    - name: Install CodeQL Pack Dependencies
+    - name: Install CodeQL pack dependencies
       run: codeql pack install ./codeql/custom-kotlin
 
-
-
-    - name: Build (manual mode)
+    - name: Build
       run: |
         chmod +x ./gradlew
         ./gradlew build --no-daemon --stacktrace --info
@@ -40,4 +36,6 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
-        category: "codeql-java-kotlin"
+        category: codeql-java-kotlin
+        # point to directory with installed packs, so analyze can resolve dependencies
+        packs-dir: ~/.codeql/packages
