@@ -12,7 +12,8 @@ jobs:
       security-events: write
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
@@ -22,8 +23,8 @@ jobs:
             codeql/kotlin-all@2.12.0
             ./codeql/custom-kotlin
 
-      - name: Build
+      - name: Build Kotlin project
         run: ./gradlew assemble
 
-      - name: Analyze
+      - name: Run CodeQL analysis
         uses: github/codeql-action/analyze@v3
