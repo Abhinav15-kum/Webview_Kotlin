@@ -23,7 +23,7 @@ jobs:
           ./gradlew assemble  # Or use your preferred build command
 
       - name: Run CodeQL custom query
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3
         with:
           category: 'custom-codeql'
           queries: ./codeql/custom-kotlin/queries/WebViewVulnerabilities.ql
