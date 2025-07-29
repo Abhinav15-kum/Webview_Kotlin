@@ -11,35 +11,36 @@ jobs:
       security-events: write
       contents: read
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      # Install CodeQL CLI first (without queries)
-      - name: Initialize CodeQL without custom queries
+      # Step 1: Initialize CodeQL CLI without queries so CLI is installed
+      - name: Initialize CodeQL CLI only
         uses: github/codeql-action/init@v3
         with:
           languages: kotlin
 
-      # Install official kotlin-all pack globally
+      # Step 2: Now that CLI is installed, install official kotlin pack globally
       - name: Install official Kotlin pack globally
         run: codeql pack install codeql/kotlin-all
 
-      # Install your custom Kotlin pack dependencies locally
+      # Step 3: Install your custom pack dependencies locally
       - name: Install CodeQL packs for custom-kotlin
         run: |
           cd codeql/custom-kotlin
           codeql pack install
 
-      # Now re-run init with your custom queries
+      # Step 4: Initialize again, now with custom queries (all dependencies present)
       - name: Initialize CodeQL with custom queries
         uses: github/codeql-action/init@v3
         with:
           languages: kotlin
           queries: ./codeql/custom-kotlin
 
+      # Step 5: Build your Kotlin project
       - name: Build the project
         run: ./gradlew assemble
 
+      # Step 6: Run CodeQL analysis
       - name: Run CodeQL analysis
         uses: github/codeql-action/analyze@v3
         with:
