@@ -1,28 +1,39 @@
-name: Run CodeQL on Kotlin
+name: Custom CodeQL WebView Scan
 
 on:
   push:
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  codeql:
+  analyze:
+    name: Analyze Kotlin code with custom WebView query
     runs-on: ubuntu-latest
+
     permissions:
+      actions: read
       contents: read
       security-events: write
 
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'kotlin' ]
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: kotlin
-          packs: codeql/kotlin-all@2.12.0,./codeql/custom-kotlin
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        queries: ./codeql/custom-kotlin/queries
 
-      - name: Build Kotlin project
-        run: ./gradlew assemble
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v3
 
-      - name: Run CodeQL analysis
-        uses: github/codeql-action/analyze@v3
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
