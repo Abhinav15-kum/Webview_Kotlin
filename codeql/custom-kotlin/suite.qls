@@ -1,1 +1,3 @@
-import custom-kotlin.queries.WebViewVulnerabilities
+- query: queries/WebViewVulnerabilities.ql
+  include:
+    - kotlin
