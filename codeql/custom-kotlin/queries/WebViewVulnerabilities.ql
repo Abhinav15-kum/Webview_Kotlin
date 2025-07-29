@@ -1,10 +1,8 @@
-import semmle.code.kotlin.Assignment
-import semmle.code.kotlin.Property
+import java
+import semmle.code.java.frameworks.kotlin.Kotlin
 
-from Assignment assign, Property p, BooleanLiteral lit
-where
-  assign.getTarget() = p and
-  p.getName() = "javaScriptEnabled" and
-  assign.getValue() = lit and
-  lit.getBooleanValue() = true
-select assign, "JavaScript is enabled on a WebView, exposing injection risks."
+from MethodAccess call
+where 
+  call.getMethod().hasName("setJavaScriptEnabled") and
+  call.getArgument(0).(CompileTimeConstantExpr).getBooleanValue() = true
+select call, "WebView JavaScript is enabled, which may allow XSS attacks."
