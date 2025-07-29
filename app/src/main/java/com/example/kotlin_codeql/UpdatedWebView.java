@@ -22,7 +22,7 @@ public class UpdatedWebView extends AppCompatActivity {
 
         WebSettings webSettings = secureWebView.getSettings();
         webSettings.setJavaScriptEnabled(true); // Only enable if necessary
-        webSettings.setAllowFileAccess(false); // Prevent file access
+        webSettings.setAllowFileAccess(true); // Prevent file access
         webSettings.setAllowContentAccess(false);
         webSettings.setDomStorageEnabled(true);
 
