@@ -5,12 +5,14 @@ on:
 
   pull_request:
 
+
 jobs:
   codeql-custom-query:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -21,28 +23,25 @@ jobs:
         with:
           languages: kotlin
 
-      # Step 2: Now CLI is installed, install official Kotlin pack globally
-      - name: Install official Kotlin pack globally
-        run: codeql pack install codeql/kotlin-all
-
-      # Step 3: Install your custom Kotlin pack dependencies
-      - name: Install custom Kotlin pack dependencies
+      # Step 2: Install packs in the same step where CLI is available
+      - name: Install official Kotlin pack and custom pack dependencies
         run: |
+          codeql pack install codeql/kotlin-all
           cd codeql/custom-kotlin
           codeql pack install
 
-      # Step 4: Re-initialize CodeQL with your custom queries (dependencies installed)
+      # Step 3: Initialize CodeQL again with your custom queries
       - name: Initialize CodeQL with custom queries
         uses: github/codeql-action/init@v3
         with:
           languages: kotlin
           queries: ./codeql/custom-kotlin
 
-      # Step 5: Build your Kotlin project
+      # Step 4: Build the Kotlin project
       - name: Build the project
         run: ./gradlew assemble
 
-      # Step 6: Run CodeQL analysis
+      # Step 5: Run CodeQL analysis
       - name: Run CodeQL analysis
         uses: github/codeql-action/analyze@v3
         with:
