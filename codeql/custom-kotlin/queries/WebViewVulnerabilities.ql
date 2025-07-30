@@ -1,30 +1,13 @@
 /**
- * @name Insecure WebView usage
- * @description Detects WebView components that enable JavaScript or allow file access, which can be dangerous.
+ * @name Custom Kotlin Query
+ * @description Your custom query description
  * @kind problem
  * @problem.severity warning
- * @id kotlin/insecure-webview
+ * @id custom-kotlin/my-query
  */
 
 import kotlin
-import semmle.code.kotlin.dataflow.DataFlow
-import semmle.code.kotlin.controlflow.ControlFlow
 
-class WebViewUsage extends Expr {
-  WebViewUsage() {
-    exists(ConstructorCall cc |
-      cc.getType().hasQualifiedName("android.webkit", "WebView") and
-      cc = this
-    )
-  }
-}
-
-from MethodAccess ma, WebViewUsage wv
-where
-  wv = ma.getQualifier() and
-  (
-    ma.getMethod().getName() = "getSettings" or
-    ma.getMethod().getName() = "setJavaScriptEnabled" or
-    ma.getMethod().getName() = "setAllowFileAccess"
-  )
-select ma, "Potentially insecure WebView configuration."
+from Method m
+where m.getName() = "onCreate"
+select m, "Found onCreate method"
