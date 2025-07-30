@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'java' ]  # Changed from 'kotlin' to 'java' - CodeQL treats Kotlin as Java
+        language: [ 'java' ]  # Use 'java' for Kotlin analysis
     
     steps:
     - name: Checkout repository
@@ -26,28 +26,15 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        # Option 1: Use queries directory
         queries: ./codeql/custom-kotlin/queries
-        # Option 2: Use pack (uncomment this and comment queries above)
-        # packs: custom-kotlin
     
-    # Install custom pack AFTER CodeQL is initialized (when codeql CLI is available)
-    - name: Install custom CodeQL pack
+    # Install pack dependencies after CodeQL CLI is available
+    - name: Install custom CodeQL pack dependencies
       run: |
-        echo "Current directory: $(pwd)"
-        echo "Listing repository contents:"
-        ls -la
-        if [ -d "codeql/custom-kotlin" ]; then
-          cd codeql/custom-kotlin
-          echo "Installing CodeQL pack dependencies..."
-          codeql pack install
-          echo "Verifying pack compilation..."
-          codeql pack compile .
-          echo "Pack installation completed successfully"
-        else
-          echo "ERROR: codeql/custom-kotlin directory not found"
-          exit 1
-        fi
+        echo "Installing custom pack dependencies..."
+        cd codeql/custom-kotlin
+        codeql pack install
+        echo "Pack dependencies installed successfully"
     
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
