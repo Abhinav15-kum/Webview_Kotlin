@@ -1,19 +1,28 @@
 /**
- * @name Insecure WebView JavaScript Enabled
- * @description Detects WebView configurations where JavaScript is enabled
+ * @name WebView JavaScript Enabled
+ * @description Detects when JavaScript is explicitly enabled in WebView settings
  * @kind problem
  * @problem.severity warning
  * @id custom-kotlin/webview-javascript-enabled
  * @tags security
- *       webview
  *       android
+ *       webview
  */
 
 import java
 
-from MethodAccess call
+class WebSettings extends RefType {
+  WebSettings() {
+    this.hasQualifiedName("android.webkit", "WebSettings")
+  }
+}
+
+from MethodAccess ma
 where
-  call.getMethod().hasName("setJavaScriptEnabled") and
-  call.getMethod().getDeclaringType().hasQualifiedName("android.webkit", "WebSettings") and
-  call.getArgument(0).(CompileTimeConstantExpr).getBooleanValue() = true
-select call, "JavaScript is enabled in WebView, which may pose security risks."
+  ma.getMethod().getDeclaringType() instanceof WebSettings and
+  ma.getMethod().hasName("setJavaScriptEnabled") and
+  (
+    ma.getArgument(0).(BooleanLiteral).getBooleanValue() = true or
+    ma.getArgument(0).(CompileTimeConstantExpr).getBooleanValue() = true
+  )
+select ma, "JavaScript is explicitly enabled in WebView, which may introduce security vulnerabilities."
