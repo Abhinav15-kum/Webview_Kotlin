@@ -2,5 +2,4 @@ name: custom-kotlin
 version: 0.0.1
 dependencies:
   codeql/kotlin-all: "*"
-libraryPathDependencies: codeql/kotlin-all
 extractor: kotlin
