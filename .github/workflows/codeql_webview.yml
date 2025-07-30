@@ -2,38 +2,55 @@ name: Custom CodeQL WebView Scan
 
 on:
   push:
-
   pull_request:
-
   workflow_dispatch:
 
 jobs:
   analyze:
     name: Analyze Kotlin code with custom WebView query
     runs-on: ubuntu-latest
-
     permissions:
       actions: read
       contents: read
       security-events: write
-
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'kotlin' ]
-
+        language: [ 'java' ]  # Changed from 'kotlin' to 'java' - CodeQL treats Kotlin as Java
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
+    
+    # Add this step to install the custom pack dependencies
+    - name: Install custom CodeQL pack
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Listing repository contents:"
+        ls -la
+        if [ -d "codeql/custom-kotlin" ]; then
+          cd codeql/custom-kotlin
+          echo "Installing CodeQL pack dependencies..."
+          codeql pack install
+          echo "Verifying pack compilation..."
+          codeql pack compile .
+          echo "Pack installation completed successfully"
+        else
+          echo "ERROR: codeql/custom-kotlin directory not found"
+          exit 1
+        fi
+    
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
+        # Option 1: Use queries directory
         queries: ./codeql/custom-kotlin/queries
-
+        # Option 2: Use pack (uncomment this and comment queries above)
+        # packs: custom-kotlin
+    
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
-
+    
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
