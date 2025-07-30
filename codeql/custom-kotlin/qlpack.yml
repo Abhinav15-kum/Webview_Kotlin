@@ -1,5 +1,5 @@
 name: custom-kotlin
 version: 1.0.0
-description: Custom Kotlin queries
+description: Custom Kotlin/Java WebView queries
 dependencies:
-  codeql/kotlin-all: "*"
+  codeql/java-all: "*"
