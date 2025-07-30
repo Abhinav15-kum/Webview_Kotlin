@@ -1,6 +1,6 @@
 /**
- * @name WebView JavaScript Enabled
- * @description Detects when JavaScript is explicitly enabled in WebView settings
+ * @name WebView JavaScript Enabled in Kotlin
+ * @description Detects when JavaScript is explicitly enabled in Kotlin WebView settings
  * @kind problem
  * @problem.severity warning
  * @id custom-kotlin/webview-javascript-enabled
@@ -9,10 +9,14 @@
  *       webview
  */
 
-import java
+import kotlin
+import kotlin.DataFlow
+import kotlin.exprs.PropertyAccess
+import kotlin.exprs.BoolLiteral
 
-from MethodAccess call
+from PropertyAccess pa, BoolLiteral b
 where
-  call.getMethod().hasName("setJavaScriptEnabled") and
-  call.getMethod().getDeclaringType().hasQualifiedName("android.webkit", "WebSettings")
-select call, "JavaScript is enabled in WebView. Ensure this is necessary and properly secured."
+  pa.getName() = "javaScriptEnabled" and
+  b.getBooleanValue() = true and
+  pa.getAnAssignment().getRhs() = b
+select pa, "JavaScript is enabled in WebView. Ensure this is necessary and properly secured."
