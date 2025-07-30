@@ -1,6 +1,5 @@
 name: custom-kotlin
 version: 1.0.0
+description: Custom Kotlin queries
 dependencies:
   codeql/kotlin-all: "*"
-libraryPathDependencies:
-  codeql/kotlin-all
