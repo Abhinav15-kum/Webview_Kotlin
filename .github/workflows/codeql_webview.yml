@@ -22,7 +22,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
     
-    # Add this step to install the custom pack dependencies
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        # Option 1: Use queries directory
+        queries: ./codeql/custom-kotlin/queries
+        # Option 2: Use pack (uncomment this and comment queries above)
+        # packs: custom-kotlin
+    
+    # Install custom pack AFTER CodeQL is initialized (when codeql CLI is available)
     - name: Install custom CodeQL pack
       run: |
         echo "Current directory: $(pwd)"
@@ -39,15 +48,6 @@ jobs:
           echo "ERROR: codeql/custom-kotlin directory not found"
           exit 1
         fi
-    
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: ${{ matrix.language }}
-        # Option 1: Use queries directory
-        queries: ./codeql/custom-kotlin/queries
-        # Option 2: Use pack (uncomment this and comment queries above)
-        # packs: custom-kotlin
     
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
