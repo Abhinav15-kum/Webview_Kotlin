@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'java' ]  # Use 'java' for Kotlin analysis
+        language: [ 'java' ]
     
     steps:
     - name: Checkout repository
@@ -27,14 +27,6 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         queries: ./codeql/custom-kotlin/queries
-    
-    # Install pack dependencies after CodeQL CLI is available
-    - name: Install custom CodeQL pack dependencies
-      run: |
-        echo "Installing custom pack dependencies..."
-        cd codeql/custom-kotlin
-        codeql pack install
-        echo "Pack dependencies installed successfully"
     
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
