@@ -22,26 +22,24 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
     
-    # Create a lock file to avoid dependency resolution issues
-    - name: Create CodeQL pack lock file
+    # Use configuration file approach instead of pack dependencies
+    - name: Create CodeQL configuration
       run: |
-        mkdir -p codeql/custom-kotlin
-        cat > codeql/custom-kotlin/codeql-pack.lock.yml << 'EOF'
-        lockVersion: 1.0.0
-        dependencies:
-          codeql/java-all:
-            version: "*"
-          codeql/java-queries:
-            version: "*"
+        mkdir -p .github/codeql
+        cat > .github/codeql/codeql-config.yml << 'EOF'
+        name: "Custom WebView Analysis"
+        queries:
+          - uses: security-extended
+          - name: Custom WebView queries
+            uses: ./codeql/custom-kotlin/queries
         EOF
-        echo "Lock file created"
-        ls -la codeql/custom-kotlin/
+        echo "Configuration file created"
     
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        queries: ./codeql/custom-kotlin/queries
+        config-file: ./.github/codeql/codeql-config.yml
     
     - name: Autobuild
       uses: github/codeql-action/autobuild@v3
