@@ -1,25 +1,22 @@
 /**
  * @name Uses Cleartext Traffic Enabled
- * @description Detects when usesCleartextTraffic is enabled in Android manifest
+ * @description Detects usesCleartextTraffic=true with unique results
  * @kind problem
  * @problem.severity warning
- * @id custom/uses-cleartext-traffic-enabled
+ * @id custom/cleartext-unique
  * @tags security android manifest
  */
 
 import java
 
-from XmlFile manifest, XmlElement application, XmlAttribute attr
+from XmlFile manifest, XmlElement root, XmlElement application, XmlAttribute attr
 where
-  // Match AndroidManifest.xml files
   manifest.getRelativePath().matches("%AndroidManifest.xml") and
-  
-  // Find direct application element (not nested)
-  application = manifest.getAChild() and
+  root = manifest.getAChild() and
+  root.getName() = "manifest" and
+  application = root.getAChild() and
   application.getName() = "application" and
-  
-  // Find usesCleartextTraffic attribute set to true
   attr = application.getAttribute("usesCleartextTraffic") and
-  (attr.getValue() = "true" or attr.getValue() = "True" or attr.getValue() = "TRUE")
+  attr.getValue() = "true"
 
-select attr, "usesCleartextTraffic is enabled in Android manifest - this allows unencrypted HTTP connections and may expose sensitive data to network attacks"
+select attr, "usesCleartextTraffic is enabled - allows HTTP connections, creating security vulnerability"
