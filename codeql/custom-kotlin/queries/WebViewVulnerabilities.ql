@@ -1,6 +1,6 @@
 /**
  * @name WebView Security Check
- * @description Detects potentially unsafe WebView method calls
+ * @description Simple pattern matching for WebView security issues
  * @kind problem
  * @problem.severity warning
  * @id custom/webview-simple
@@ -8,22 +8,13 @@
  */
 import java
 
-from MethodAccess call, string message
+from Method m
 where
-  (call.getMethod().getName() = "setJavaScriptEnabled" and
-   message = "JavaScript enabled in WebView - ensure this is necessary") or
-  
-  (call.getMethod().getName() = "setAllowFileAccessFromFileURLs" and
-   message = "File access from file URLs enabled - potential security risk") or
-   
-  (call.getMethod().getName() = "setAllowUniversalAccessFromFileURLs" and
-   message = "Universal access from file URLs enabled - high security risk") or
-   
-  (call.getMethod().getName() = "addJavascriptInterface" and
-   message = "JavaScript interface added - verify interface is secure") or
-   
-  (call.getMethod().getName() = "loadUrl" and 
-   call.getMethod().getDeclaringType().getName() = "WebView" and
-   message = "WebView loading URL - ensure URL is validated")
+  m.getName() = "setJavaScriptEnabled" or
+  m.getName() = "setAllowFileAccessFromFileURLs" or
+  m.getName() = "setAllowUniversalAccessFromFileURLs" or
+  m.getName() = "addJavascriptInterface" or
+  (m.getName() = "loadUrl" and m.getDeclaringType().getName() = "WebView")
 
-select call, message
+select m, 
+  "Potentially unsafe WebView method: " + m.getName() + " in class " + m.getDeclaringType().getName()
