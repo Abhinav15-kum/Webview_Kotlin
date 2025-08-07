@@ -14,8 +14,8 @@ where
   // Match AndroidManifest.xml files
   manifest.getRelativePath().matches("%AndroidManifest.xml") and
   
-  // Find application element
-  application = manifest.getAChild*() and
+  // Find direct application element (not nested)
+  application = manifest.getAChild() and
   application.getName() = "application" and
   
   // Find usesCleartextTraffic attribute set to true
