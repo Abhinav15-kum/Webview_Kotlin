@@ -1,21 +1,23 @@
 /**
- * @name Clear Text Traffic Detection
- * @description Finds clearTextTraffic=true in any form
+ * @name Uses Cleartext Traffic Detection
+ * @description Detects various forms of usesCleartextTraffic=true
  * @kind problem
- * @problem.severity warning
- * @id custom/cleartext-comprehensive
- * @tags security android manifest
+ * @problem.severity error
+ * @id custom/cleartext-detection
+ * @tags security android manifest network
  */
 
 import java
 
-from File f, int line, string lineContent
+from File f
 where
   f.getExtension() = "xml" and
-  lineContent = f.getContents().splitAt("\n", line) and
+  f.getRelativePath().regexpMatch(".*AndroidManifest\\.xml") and
   (
-    lineContent.regexpMatch(".*clearTextTraffic\\s*=\\s*[\"'](?i)true[\"'].*") or
-    lineContent.regexpMatch(".*android:clearTextTraffic\\s*=\\s*[\"'](?i)true[\"'].*")
+    f.getContents().matches("%usesCleartextTraffic=\"true\"%") or
+    f.getContents().matches("%usesCleartextTraffic='true'%") or
+    f.getContents().matches("%usesCleartextTraffic=\"True\"%") or
+    f.getContents().matches("%usesCleartextTraffic='True'%")
   )
 
-select f, "Clear text traffic enabled at line " + line + ": " + lineContent.trim()
+select f, "SECURITY RISK: usesCleartextTraffic is enabled, allowing unencrypted HTTP connections in " + f.getRelativePath()
