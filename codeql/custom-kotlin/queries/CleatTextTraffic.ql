@@ -13,7 +13,7 @@
  */
 
 import java
-from XmlFile manifest, XmlElement root, XmlElement application, XmlAttribute attr
+from XmlFile manifest
 where
   manifest.getRelativePath().matches("%AndroidManifest.xml") and
   root = manifest.getAChild() and
