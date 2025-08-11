@@ -13,13 +13,10 @@
  */
 
 import java
-from XmlFile manifest
+from XmlFile manifest, XmlElement application
 where
   manifest.getRelativePath().matches("%AndroidManifest.xml") and
-  root = manifest.getAChild() and
-  root.getName() = "manifest" and
-  application = root.getAChild() and
+  application = manifest.getAChild*() and
   application.getName() = "application" and
-  attr = application.getAttribute("usesCleartextTraffic") and
-  attr.getValue() = "true"
-select attr, "usesCleartextTraffic is enabled - allows HTTP connections, creating security vulnerability"
+  application.getAttributeValue("usesCleartextTraffic") = "true"
+select application, "usesCleartextTraffic is enabled - allows HTTP connections, creating security vulnerability"
